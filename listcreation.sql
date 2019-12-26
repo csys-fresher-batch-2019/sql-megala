@@ -2,7 +2,7 @@ create table list(
 task varchar(60) not null,
 name varchar(50) not null,
 created_date date not null,
-dealine_date date,
+deadline_date date,
 modified_date date default SYSDATE,
 completed_on date,
 priority number,
