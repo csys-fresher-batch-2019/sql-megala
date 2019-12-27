@@ -1,12 +1,12 @@
 drop table tlist;
 create table tlist(
-task varchar(60) not null,
-person_name varchar(50) not null,
+task varchar2(60) not null,
+person_name varchar2(50) not null,
 created_date date not null,
 deadline_date date,
 modified_date date default SYSDATE,
 completed_on date,
-status varchar(20)not null,
+status varchar2(20)not null,
 priority_pk number primary key
 );
 insert into tlist(task,person_name,created_date,deadline_date,completed_on,priority_pk,status)
