@@ -1,12 +1,12 @@
 drop table employee;
 create table employee(
 emp_id number,
-task varchar(30) not null,
-assigned_to varchar(20) not null,
-dep_name varchar(40),
+task varchar2(30) not null,
+assigned_to varchar2(20) not null,
+dep_name varchar2(40),
 deadline_date date not null,
 completed_on date,
-status varchar(50),
+status varchar2(50),
 salary number not null,
 priority_pk number primary key
 );
