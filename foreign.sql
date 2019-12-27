@@ -23,15 +23,15 @@ values(789,'super man','henry',1000,'john',1,'comics',1);
 create table orders(
 order_id number primary key,
 username varchar2(30) not null,
-book_id_pk number,
+book_id number,
 ordered_date timestamp default sysdate not null,
 delivered_date timestamp,
 total_amount_ck number check(total_amount_ck>=0),
 quantity_ck number check(quantity_ck>0),
 status_ck varchar2(50) check(status_ck in ('PENDING','CANCELLED','DELIVERED','NOT AVAILABLE')),
-constraint book_id_fk foreign key (book_id_pk) references books(book_id_pk)
+constraint book_id_fk foreign key (book_id) references books(book_id_pk)
 );
-insert into orders (order_id,username,book_id_pk,total_amount_ck,quantity_ck,status_ck)
+insert into orders (order_id,username,book_id,total_amount_ck,quantity_ck,status_ck)
 values(111,'meg',123,1200,2,'DELIVERED');
 
 select *from books;
