@@ -1,4 +1,3 @@
-
 drop table employee;
 create table employee(
 emp_id number,
@@ -40,3 +39,22 @@ select *from employee order by priority_pk;
 update employee set assigned_to='anu'where assigned_to='mega' and status='PENDING';
 
 select *from employee order by priority_pk;
+/*select dep_name,count(*),min(salary),max(salary),sum(salary),avg(salary) from employee group by dep_name having count(*)<=1;*/
+
+select dep_name,count(*) from employee group by dep_name;
+
+
+select * from employee;
+
+
+/*select dep_name,sum(decode(status,'completed',1,0))as completed,sum(decode(status,'pending',1,0)) as pending from employee;*/
+
+select dep_name,sum(case when status='COMPLETED' then 1 else 0 end)as completed,sum(case when status='PENDING' then 1 else 0 end) as pending from employee
+group by dep_name;
+
+
+
+
+
+
+
