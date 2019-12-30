@@ -1,6 +1,6 @@
 # Bank Management App
 
-* http://bank.in
+* http://citibank.in
 
 ## Features
  * customers should be able to view all the branches
