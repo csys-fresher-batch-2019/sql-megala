@@ -7,7 +7,7 @@
  
 ### Feature 1:List all branches
 ```sql
-  create table banks(
+  create table branch(
   branch_name varchar2(50) primary key,
   branch_city varchar2(60) not null
   );
@@ -15,5 +15,5 @@
 
 Query:
 ```sql
-  select * from banks;
+  select * from branch;
   ```
