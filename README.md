@@ -8,8 +8,8 @@
 ### Feature 1:List all branches
 ```sql
   create table banks(
-  branch_name varchar2(50),
-  branch_city varchar2(40)
+  branch_name varchar2(50) primary key,
+  branch_city varchar2(60)
   );
   ```
 
