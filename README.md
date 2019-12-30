@@ -9,7 +9,7 @@
 ```sql
   create table banks(
   branch_name varchar2(50) primary key,
-  branch_city varchar2(60)
+  branch_city varchar2(60) not null
   );
   ```
 
