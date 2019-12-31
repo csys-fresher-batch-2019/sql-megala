@@ -55,24 +55,26 @@ select *from customer_details;
 create table account_details(
 customer_name varchar2(40) not null,
 acc_no number primary key,
+acc_type varchar2(10) not null,
 balance number not null,
+constraint acc_type_ck check(acc_type in ('credit','debit')),
 constraint customer_name_fk foreign key (customer_name) references customer_details(customer_name)
 --constraint acc_no_pk primary key (acc_no)
 );
-insert into account_details(customer_name,acc_no,balance)
-values('karthi',11111,10000);
+insert into account_details(customer_name,acc_no,acc_type,balance)
+values('karthi',11111,'credit',10000);
 
-insert into account_details(customer_name,acc_no,balance)
-values('surya',11122,20000);
+insert into account_details(customer_name,acc_no,acc_type,balance)
+values('surya',11122,'debit',20000);
 
-insert into account_details(customer_name,acc_no,balance)
-values('bharu',11133,30000);
+insert into account_details(customer_name,acc_no,acc_type,balance)
+values('bharu',11133,'credit',30000);
 
-insert into account_details(customer_name,acc_no,balance)
-values('sandhi',11144,40000);
+insert into account_details(customer_name,acc_no,acc_type,balance)
+values('sandhi',11144,'credit',40000);
 
-insert into account_details(customer_name,acc_no,balance)
-values('prabha',11155,50000);
+insert into account_details(customer_name,acc_no,acc_type,balance)
+values('prabha',11155,'debit',50000);
 
 select * from account_details;
 
@@ -108,34 +110,35 @@ select *from loan_details;
 select * from account_details a,loan_details l where l.customer_name=a.customer_name;
 
 create table credit_card(
-customer_id number not null,
+-- customer_id number not null,
 credit_card_no number not null,
 acc_no number not null,
 limit_no number not null,
-expiry_date date,
-constraint customer_card_uq unique(customer_id),
+expiry_date date not null,
+created_date date default sysdate,
+blocked number not null,
+constraint blocked_ck check(blocked in (1,0)),
+constraint expiry_date_ck check(expiry_date>created_date),
+--constraint customer_card_uq unique(customer_id),
 constraint credit_card_no_uq unique(credit_card_no),
 constraint acc_no_uq unique(acc_no),
-constraint customer_id_2_fk foreign key (customer_id) references customer_details(customer_id),
 constraint acc_no_fk foreign key (acc_no) references account_details(acc_no)
 --constraint acc_no_uq unique(acc_no)
 );
 
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(235,11110,11155,10000,to_date('20-12-2020','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
+values(11110,11155,10000,to_date('20-12-2020','dd-MM-yyyy'));
 
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(609,11112,11133,15000,to_date('10-05-2023','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
+values(21112,11133,15000,to_date('31-01-2020','dd-MM-yyyy'));
 
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(850,11114,11144,25000,to_date('09-04-2021','dd-MM-yyyy'));
-/*
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(609,11112,11133,15000,to_date('10-05-2023','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
+values(31114,11144,25000,to_date('09-04-2021','dd-MM-yyyy'));
 
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(609,11112,11133,15000,to_date('10-05-2023','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
+values(31115,11122,25000,to_date('05-05-2020','dd-MM-yyyy'));
 
-insert into credit_card(customer_id,credit_card_no,acc_no,limit_no,expiry_date)
-values(609,11112,11133,15000,to_date('10-05-2023','dd-MM-yyyy'));*/
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
+values(41116,11111,25000,to_date('02-09-2022','dd-MM-yyyy'));
+
 select *from credit_card ;
