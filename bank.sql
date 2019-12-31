@@ -116,7 +116,9 @@ acc_no number not null,
 limit_no number not null,
 expiry_date date not null,
 created_date date default sysdate,
-blocked number not null,
+emergency number,
+blocked number,
+constraint emergency_ck check(emergency in (1,0)),
 constraint blocked_ck check(blocked in (1,0)),
 constraint expiry_date_ck check(expiry_date>created_date),
 --constraint customer_card_uq unique(customer_id),
@@ -126,19 +128,22 @@ constraint acc_no_fk foreign key (acc_no) references account_details(acc_no)
 --constraint acc_no_uq unique(acc_no)
 );
 
-insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
-values(11110,11155,10000,to_date('20-12-2020','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
+values(11110,11155,10000,to_date('20-12-2020','dd-MM-yyyy'),1);
 
-insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
-values(21112,11133,15000,to_date('31-01-2020','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
+values(21112,11133,15000,to_date('31-01-2020','dd-MM-yyyy'),0);
 
-insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
-values(31114,11144,25000,to_date('09-04-2021','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
+values(31114,11144,25000,to_date('09-04-2019','dd-MM-yyyy'),0);
 
-insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
-values(31115,11122,25000,to_date('05-05-2020','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
+values(31115,11122,25000,to_date('05-05-2020','dd-MM-yyyy'),0);
 
-insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date)
-values(41116,11111,25000,to_date('02-09-2022','dd-MM-yyyy'));
+insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
+values(41116,11111,25000,to_date('02-09-2022','dd-MM-yyyy'),0);
+
+update credit_card set blocked=1 where emergency=1 or (expiry_date>created_date);
+update credit_card set blocked=0 where emergency=0 or (expiry_date<created_date);
 
 select *from credit_card ;
