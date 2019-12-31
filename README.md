@@ -1,4 +1,4 @@
-# Bank Management App
+# Citibank Management App
 
 * http://citibank.in
 
