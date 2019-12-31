@@ -102,4 +102,7 @@ insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
 values(235,'prabha','sulur','A5F5690981',145000);
 select *from loan_details;
 
-
+create table credit_card(
+customer_id number not null,
+credit_card_no not null,
+acc_no not null,
