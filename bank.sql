@@ -27,7 +27,11 @@ values(1000000014,'vandalur','chennai');
 insert into branch(branch_id,branch_name,branch_city)
 values(1000000015,'alwarpet','chennai');
 
-select *from branch order by branch_city ASC;
+select *from branch order by branch_id ASC;
+
+select count(distinct(branch_city)) from branch;
+
+select distinct(branch_city) from branch;
 
 create table customer_details(
 customer_name varchar2(50) not null,
@@ -61,26 +65,36 @@ customer_name varchar2(40) not null,
 acc_no number primary key,
 acc_type varchar2(70) not null,
 available_balance number not null,
-constraint acc_type_ck check(acc_type in ('salaried account','savings account')),
+constraint acc_type_ck check(acc_type in ('salaried','saving')),
 constraint customer_name_fk foreign key (customer_name) references customer_details(customer_name)
 --constraint acc_no_pk primary key (acc_no)
 );
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
-values('karthi',11111,'salaried account',10000);
+values('karthi',11111,'salaried',10000);
 
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
-values('surya',11122,'savings account',20000);
+values('surya',11122,'saving',15000);
 
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
-values('bharu',11133,'savings account',30000);
+values('bharu',11133,'saving',20000);
 
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
-values('sandhi',11144,'salaried account',40000);
+values('sandhi',11144,'salaried',21000);
 
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
-values('prabha',11155,'savings account',50000);
+values('prabha',11155,'saving',40000);
 
-select * from account_details order by acc_no ASC;
+select * from account_details order by customer_name ASC;
+
+select customer_name,available_balance from account_details where available_balance<=20000;
+
+select acc_no,acc_type,available_balance from account_details where acc_type='saving';
+
+select max(available_balance) from account_details;
+
+select customer_name from account_details where available_balance=(select min(available_balance) from account_details);
+
+select count(*) from account_details;
 
 create table loan_details( 
 customer_id number not null,
@@ -107,8 +121,8 @@ values(754,'surya','ambattur','A3H3680981',1200000);
 insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
 values(609,'bharu','maambakkam','A4B2397681',100000);
 
-insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
-values(235,'prabha','sulur','A5F5690981',145000);
+--insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+--values(235,'prabha','sulur','A5F5690981',145000);
 select *from loan_details;
 
 select * from account_details a,loan_details l where l.customer_name=a.customer_name;
@@ -202,10 +216,11 @@ select *from transaction_details order by transaction_id ASC;
 update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 1)
 where acc_no = 11111;
 
-update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 1)
+update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 2)
 where acc_no = 11122;
 
-update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 1)
+update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 3)
 where acc_no = 11155;
 
 select *from account_details;
+
