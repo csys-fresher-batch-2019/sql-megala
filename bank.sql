@@ -141,6 +141,7 @@ values(609,'bharu','maambakkam','A4B2397681',100000);
 
 select *from loan_details;
 
+--------------display the account details using join-----------------------
 select * from account_details a,loan_details l where l.customer_name=a.customer_name;
 
 create table credit_card(
@@ -180,7 +181,11 @@ values(41116,11111,25000,to_date('02-09-2022','dd-MM-yyyy'),0);
 update credit_card set blocked=1 where emergency=1 or (expiry_date>created_date);
 update credit_card set blocked=0 where emergency=0 or (expiry_date<created_date);
 
-select *from credit_card ;
+--------display acc_no in ascending order-------------
+select *from credit_card order by acc_no ASC;
+
+----------display the credit card details when blocked is 0----------
+select *from credit_card where blocked=0;
 
 create table beneficiary_list(
 beneficiary_name varchar2(50),
@@ -218,15 +223,15 @@ constraint beneficiary_acc_no_fk foreign key(beneficiary_acc_no) references  ben
 );
 
 insert into transaction_details(transaction_id,beneficiary_acc_no,transaction_date,transaction_amount)
-values(1,123678954,to_date('31-01-2020','dd-MM-yyyy'),100);
+values(1,123678954,to_date('31-01-2020','dd-MM-yyyy'),1000);
 
 insert into transaction_details(transaction_id,beneficiary_acc_no,transaction_date,transaction_amount)
-values(2,7891234250,to_date('30-03-2020','dd-MM-yyyy'),200);
+values(2,7891234250,to_date('30-03-2020','dd-MM-yyyy'),2000);
 
 insert into transaction_details(transaction_id,beneficiary_acc_no,transaction_date,transaction_amount)
-values(3,9875466437,to_date('13-02-2020','dd-MM-yyyy'),300);
+values(3,9875466437,to_date('13-02-2020','dd-MM-yyyy'),3000);
 
-
+-----------display the transaction details in ascending order---------------
 select *from transaction_details order by transaction_id ASC;
 
 update account_details set available_balance =  available_balance-(select transaction_amount from transaction_details where transaction_id = 1)
