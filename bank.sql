@@ -1,3 +1,4 @@
+drop table beneficiary_list;
 drop table credit_card;
 drop table loan_details;
 drop table account_details;
@@ -56,25 +57,25 @@ create table account_details(
 customer_name varchar2(40) not null,
 acc_no number primary key,
 acc_type varchar2(10) not null,
-balance number not null,
-constraint acc_type_ck check(acc_type in ('credit','debit')),
+available_balance number not null,
+constraint acc_type_ck check(acc_type in ('salaried account','savings account')),
 constraint customer_name_fk foreign key (customer_name) references customer_details(customer_name)
 --constraint acc_no_pk primary key (acc_no)
 );
-insert into account_details(customer_name,acc_no,acc_type,balance)
-values('karthi',11111,'credit',10000);
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('karthi',11111,'salaried account',10000);
 
-insert into account_details(customer_name,acc_no,acc_type,balance)
-values('surya',11122,'debit',20000);
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('surya',11122,'savings account',20000);
 
-insert into account_details(customer_name,acc_no,acc_type,balance)
-values('bharu',11133,'credit',30000);
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('bharu',11133,'savings account',30000);
 
-insert into account_details(customer_name,acc_no,acc_type,balance)
-values('sandhi',11144,'credit',40000);
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('sandhi',11144,'salaried account',40000);
 
-insert into account_details(customer_name,acc_no,acc_type,balance)
-values('prabha',11155,'debit',50000);
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('prabha',11155,'savings account',50000);
 
 select * from account_details;
 
@@ -147,3 +148,39 @@ update credit_card set blocked=1 where emergency=1 or (expiry_date>created_date)
 update credit_card set blocked=0 where emergency=0 or (expiry_date<created_date);
 
 select *from credit_card ;
+
+create table beneficiary_list(
+beneficiary_name varchar2(50),
+acc_no_1 number not null,
+IFSC_code varchar2(50) not null,
+constraint acc_no__1_uq unique (acc_no_1),
+constraint IFSC_code_uq unique(IFSC_code),
+constraint beneficiary_name_pk primary key (beneficiary_name)
+);
+
+insert into beneficiary_list(beneficiary_name,acc_no_1,IFSC_code)
+values('jeeva',123678954,'45SAFGYD76');
+
+insert into beneficiary_list(beneficiary_name,acc_no_1,IFSC_code)
+values('suba',7891234250,'87FGHGY87N');
+
+
+insert into beneficiary_list(beneficiary_name,acc_no_1,IFSC_code)
+values('sudha',542678192,'6568FDGD76');
+
+insert into beneficiary_list(beneficiary_name,acc_no,IFSC_code)
+values('devi',9875466437,'7GVHFVJK90');
+
+select *from beneficiary_list;
+
+create table transaction_details(
+account_holder varchar2(50) not null,
+acc_no_2 number not null,
+beneficiary_name varchar2(40) primary key,
+transaction_date date not null,
+transaction_amount number not null,
+current_balance number not null,
+constraint acc_no_uq unique(acc_no),
+constraint acc_no_2_fk foreign key(acc_no_2) references account_details(acc_no),
+constraint account_holder_fk foreign key(account_holder) references account_details(acc_no),
+
