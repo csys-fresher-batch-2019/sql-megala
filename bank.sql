@@ -27,10 +27,13 @@ values(1000000014,'vandalur','chennai');
 insert into branch(branch_id,branch_name,branch_city)
 values(1000000015,'alwarpet','chennai');
 
+---------list the brach id and its details in ascending order------------
 select *from branch order by branch_id ASC;
 
+---------count the number of branch_cities that are distinct-----------
 select count(distinct(branch_city)) from branch;
 
+---------display the branch cities that are distinct---------------
 select distinct(branch_city) from branch;
 
 create table customer_details(
@@ -56,9 +59,14 @@ values('bharu',609,'ambatturr','chennai');
 insert into customer_details(customer_name,customer_id,customer_street,customer_city)
 values('prabha',235,'jayanagar','bangalore');
 
+----------list the customer name and its details in ascending order----------
 select *from customer_details order by customer_name ASC;
 
+------------display the customer cities that are in chennai--------------
 select *from customer_details where customer_city='chennai';
+
+----------------display the customer cities except coimbatore----------
+select *from customer_details where customer_city != 'coimbatore';
 
 create table account_details(
 customer_name varchar2(40) not null,
@@ -84,16 +92,22 @@ values('sandhi',11144,'salaried',21000);
 insert into account_details(customer_name,acc_no,acc_type,available_balance)
 values('prabha',11155,'saving',40000);
 
+------------display the account details and customer name in ascending order------
 select * from account_details order by customer_name ASC;
 
+---------------available balance less than or equal to 20000------------
 select customer_name,available_balance from account_details where available_balance<=20000;
 
+------------------display account type which are saving account------------------
 select acc_no,acc_type,available_balance from account_details where acc_type='saving';
 
+-------------display maximum available balance--------------------------
 select max(available_balance) from account_details;
 
+---------------display customer name having minimum balance-------------
 select customer_name from account_details where available_balance=(select min(available_balance) from account_details);
 
+------------count the number of customers-------------- 
 select count(*) from account_details;
 
 create table loan_details( 
@@ -123,6 +137,8 @@ values(609,'bharu','maambakkam','A4B2397681',100000);
 
 --insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
 --values(235,'prabha','sulur','A5F5690981',145000);
+
+
 select *from loan_details;
 
 select * from account_details a,loan_details l where l.customer_name=a.customer_name;
@@ -153,7 +169,7 @@ insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
 values(21112,11133,15000,to_date('31-01-2020','dd-MM-yyyy'),0);
 
 insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
-values(31114,11144,25000,to_date('09-04-2019','dd-MM-yyyy'),0);
+values(31114,11144,25000,to_date('09-04-2020','dd-MM-yyyy'),1);
 
 insert into credit_card(credit_card_no,acc_no,limit_no,expiry_date,emergency)
 values(31115,11122,25000,to_date('05-05-2020','dd-MM-yyyy'),0);
