@@ -1,3 +1,4 @@
+drop table transaction_details;
 drop table beneficiary_list;
 drop table credit_card;
 drop table loan_details;
@@ -56,7 +57,7 @@ select *from customer_details;
 create table account_details(
 customer_name varchar2(40) not null,
 acc_no number primary key,
-acc_type varchar2(10) not null,
+acc_type varchar2(70) not null,
 available_balance number not null,
 constraint acc_type_ck check(acc_type in ('salaried account','savings account')),
 constraint customer_name_fk foreign key (customer_name) references customer_details(customer_name)
@@ -168,19 +169,32 @@ values('suba',7891234250,'87FGHGY87N');
 insert into beneficiary_list(beneficiary_name,acc_no_1,IFSC_code)
 values('sudha',542678192,'6568FDGD76');
 
-insert into beneficiary_list(beneficiary_name,acc_no,IFSC_code)
+insert into beneficiary_list(beneficiary_name,acc_no_1,IFSC_code)
 values('devi',9875466437,'7GVHFVJK90');
 
 select *from beneficiary_list;
 
 create table transaction_details(
 account_holder varchar2(50) not null,
-acc_no_2 number not null,
 beneficiary_name varchar2(40) primary key,
+beneficiary_acc_no number not null,
 transaction_date date not null,
-transaction_amount number not null,
-current_balance number not null,
-constraint acc_no_uq unique(acc_no),
-constraint acc_no_2_fk foreign key(acc_no_2) references account_details(acc_no),
-constraint account_holder_fk foreign key(account_holder) references account_details(acc_no),
+transaction_amount number,
+created_date date default sysdate,
+current_balance number,
+constraint transaction_date_ck check(transaction_date>created_date),
+constraint beneficiary_acc_no_uq unique(beneficiary_acc_no),
+constraint beneficiary_acc_no_fk foreign key(beneficiary_acc_no) references  beneficiary_list(acc_no_1),
+constraint account_holder_fk foreign key(account_holder) references customer_details(customer_name),
+constraint beneficiary_name_fk foreign key(beneficiary_name) references beneficiary_list(beneficiary_name)
+);
+insert into transaction_details(account_holder,beneficiary_name,beneficiary_acc_no,transaction_date,transaction_amount)
+values('karthi','jeeva',123678954,to_date('31-01-2020','dd-MM-yyyy'),' ');
 
+/*insert into transaction_details(account_holder,beneficiary_name,beneficiary_acc_no,transaction_date)
+values('','jeeva',123678954,to_date('31-01-2020','dd-MM-yyyy'));
+
+insert into transaction_details(account_holder,beneficiary_name,beneficiary_acc_no,transaction_date)
+values('karthi','jeeva',123678954,to_date('31-01-2020','dd-MM-yyyy'));*/
+
+select *from transaction_details;
