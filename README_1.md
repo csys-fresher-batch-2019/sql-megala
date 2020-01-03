@@ -368,8 +368,6 @@ transaction_id number primary key,
 beneficiary_acc_no number not null,
 transaction_date date not null,
 transaction_amount number not null,
-created_date date default sysdate,
-constraint transaction_date_ck check(transaction_date>=created_date),
 constraint beneficiary_acc_no_uq unique(beneficiary_acc_no),
 constraint beneficiary_acc_no_fk foreign key(beneficiary_acc_no) references  beneficiary_list(acc_no_1)
 );
