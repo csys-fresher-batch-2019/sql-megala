@@ -1,6 +1,34 @@
 # Citibank App
 
-## Table 1: Branch
+## Feature 1:list the branch details
+
+```sql
+create table branch(
+branch_id number,
+branch_name varchar2(50) not null,
+branch_city varchar2(60) not null,
+constraint branch_id_pk primary key(branch_id),
+constraint branch_name_uq unique(branch_name)
+);
+
+insert into branch(branch_id,branch_name,branch_city)
+values(1000000011,'singanallur','coimbatore');
+
+insert into branch(branch_id,branch_name,branch_city)
+values(1000000012,'jayanagar','bangalore');
+
+insert into branch(branch_id,branch_name,branch_city)
+values(1000000013,'ramanadhapuram','coimbatore');
+
+insert into branch(branch_id,branch_name,branch_city)
+values(1000000014,'vandalur','chennai');
+
+insert into branch(branch_id,branch_name,branch_city)
+values(1000000015,'alwarpet','chennai');
+
+select *from branch order by branch_id ASC;
+
+```
 
 | BRANCH_ID  | BRANCH_NAME    | BRANCH_CITY |
 |------------|----------------|-------------|
@@ -10,7 +38,59 @@
 | 1000000011 | singanallur    | coimbatore  |
 | 1000000013 | ramanadhapuram | coimbatore  |
 
-## Table 2: Customer_details
+
+* count the number of branch_cities that are distinct
+
+```sql
+select count(distinct(branch_city)) from branch;
+```
+
+| COUNT(DISTINCT(BRANCH_CITY)) |
+|------------------------------|
+| 3                            |
+
+
+* display the branch cities that are distinct
+
+```sql
+select distinct(branch_city) from branch;
+```
+
+| BRANCH_CITY |
+|-------------|
+| chennai     |
+| coimbatore  |
+| bangalore   |
+
+## Feature 2:customer details
+
+```sql
+create table customer_details(
+customer_name varchar2(50) not null,
+customer_id number,
+customer_street varchar2(50) not null,
+customer_city varchar2(40) not null,
+constraint customer_id_pk primary key (customer_id),
+constraint customer_name_uq unique(customer_name)
+);
+
+insert into customer_details(customer_name,customer_id,customer_street,customer_city)
+values('sandhi',123,'ondipudur','coimbatore');
+
+insert into customer_details(customer_name,customer_id,customer_street,customer_city)
+values('karthi',850,'irugur','coimbatore');
+
+insert into customer_details(customer_name,customer_id,customer_street,customer_city)
+values('surya',754,'madambakkam','chennai');
+
+insert into customer_details(customer_name,customer_id,customer_street,customer_city)
+values('bharu',609,'ambatturr','chennai');
+
+insert into customer_details(customer_name,customer_id,customer_street,customer_city)
+values('prabha',235,'jayanagar','bangalore');
+
+select *from customer_details order by customer_name ASC;
+```
 
 | CUSTOMER_NAME | CUSTOMER_ID | CUSTOMER_STREET | CUSTOMER_CITY |
 |---------------|-------------|-----------------|---------------|
@@ -20,8 +100,60 @@
 | sandhi        | 123         | ondipudur       | coimbatore    |
 | surya         | 754         | madambakkam     | chennai       |
 
-## Table 3: Account_details
 
+* display the customer cities that are in chennai
+
+```sql
+select *from customer_details where customer_city='chennai';
+```
+
+| CUSTOMER_NAME | CUSTOMER_ID | CUSTOMER_STREET | CUSTOMER_CITY |
+|---------------|-------------|-----------------|---------------|
+| surya         | 754         | madambakkam     | chennai       |
+| bharu         | 609         | ambatturr       | chennai       |
+
+* display the customer cities except coimbatore
+
+```sql
+select *from customer_details where customer_city != 'coimbatore';
+```
+
+| CUSTOMER_NAME | CUSTOMER_ID | CUSTOMER_STREET | CUSTOMER_CITY |
+|---------------|-------------|-----------------|---------------|
+| surya         | 754         | madambakkam     | chennai       |
+| bharu         | 609         | ambatturr       | chennai       |
+| prabha        | 235         | jayanagar       | bangalore     |
+
+## Feature 3: display the account details
+
+```sql
+create table account_details(
+customer_name varchar2(40) not null,
+acc_no number primary key,
+acc_type varchar2(70) not null,
+available_balance number not null,
+constraint acc_type_ck check(acc_type in ('salaried','saving')),
+constraint customer_name_fk foreign key (customer_name) references customer_details(customer_name)
+--constraint acc_no_pk primary key (acc_no)
+);
+
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('karthi',11111,'salaried',10000);
+
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('surya',11122,'saving',15000);
+
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('bharu',11133,'saving',20000);
+
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('sandhi',11144,'salaried',21000);
+
+insert into account_details(customer_name,acc_no,acc_type,available_balance)
+values('prabha',11155,'saving',40000);
+
+select * from account_details order by customer_name ASC;
+```
 | CUSTOMER_NAME | ACC_NO | BALANCE |
 |---------------|--------|---------|
 | karthi        | 11111  | 10000   |
@@ -30,8 +162,89 @@
 | sandhi        | 11144  | 40000   |
 | prabha        | 11155  | 50000   |
 
-## Table 4: Loan _details
+* available balance less than or equal to 20000
 
+```sql
+select customer_name,available_balance from account_details where available_balance<=20000;
+```
+
+| CUSTOMER_NAME | AVAILABLE_BALANCE |
+|---------------|-------------------|
+| karthi        | 10000             |
+| surya         | 15000             |
+| bharu         | 20000             |
+
+* display account type which are saving account
+
+```sql
+select acc_no,acc_type,available_balance from account_details where acc_type='saving';
+```
+| ACC_NO | ACC_TYPE | AVAILABLE_BALANCE |
+|--------|----------|-------------------|
+| 11122  | saving   | 15000             |
+| 11133  | saving   | 20000             |
+| 11155  | saving   | 40000             |
+
+* display maximum available balance
+
+```sql
+select max(available_balance) from account_details;
+```
+| MAX(AVAILABLE_BALANCE) |
+|------------------------|
+| 40000                  |
+
+* display customer name having minimum balance
+
+```sql
+select customer_name from account_details where available_balance=(select min(available_balance) from account_details);
+```
+| CUSTOMER_NAME |
+|---------------|
+| karthi        |
+
+* count the number of customers
+
+```sql
+select count(*) from account_details;
+```
+| COUNT(*) |
+|----------|
+| 5        |
+
+## Table 4: Loan _details
+```sql
+create table loan_details( 
+customer_id number not null,
+customer_name varchar2(50)not null,
+branch_name varchar2(50) not null,
+loan_no varchar2(50),
+amount number not null,
+constraint customer_name_1_fk foreign key (customer_name) references customer_details(customer_name),
+constraint customer_id_uq unique(customer_id),
+constraint customer_name_1_uq unique(customer_name),
+constraint customer_id_fk foreign key (customer_id) references customer_details(customer_id),
+constraint loan_no_pk primary key (loan_no)
+);
+
+insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+values(123,'sandhi','irugur','A1B2390981',100000);
+
+insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+values(850,'karthi','selayur','A2B2560981',150000);
+
+insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+values(754,'surya','ambattur','A3H3680981',1200000);
+
+insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+values(609,'bharu','maambakkam','A4B2397681',100000);
+
+--insert into loan_details(customer_id,customer_name,branch_name,loan_no,amount)
+--values(235,'prabha','sulur','A5F5690981',145000);
+
+
+select *from loan_details;
+```
 | CUSTOMER_ID | CUSTOMER_NAME | BRANCH_NAME | LOAN_NO    | AMOUNT  |
 |-------------|---------------|-------------|------------|---------|
 | 123         | sandhi        | irugur      | A1B2390981 | 100000  |
@@ -39,3 +252,18 @@
 | 754         | surya         | ambattur    | A3H3680981 | 1200000 |
 | 609         | bharu         | maambakkam  | A4B2397681 | 100000  |
 | 235         | prabha        | sulur       | A5F5690981 | 145000  |
+
+* display the account details using join
+
+```sql
+select * from account_details a,loan_details l where l.customer_name=a.customer_name;
+```
+
+| CUSTOMER_NAME | ACC_NO | ACC_TYPE | AVAILABLE_BALANCE | CUSTOMER_ID | CUSTOMER_NAME | BRANCH_NAME | LOAN_NO    | AMOUNT  |
+|---------------|--------|----------|-------------------|-------------|---------------|-------------|------------|---------|
+| karthi        | 11111  | salaried | 10000             | 850         | karthi        | selayur     | A2B2560981 | 150000  |
+| surya         | 11122  | saving   | 15000             | 754         | surya         | ambattur    | A3H3680981 | 1200000 |
+| bharu         | 11133  | saving   | 20000             | 609         | bharu         | maambakkam  | A4B2397681 | 100000  |
+| sandhi        | 11144  | salaried | 21000             | 123         | sandhi        | irugur      | A1B2390981 | 100000  |
+
+## Feature 5:credit card
